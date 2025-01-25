@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
-<manifest package="org.uniq.story" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0.4" android:versionCode="3" android:installLocation="auto">
+<manifest package="org.uniq.story" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0.18" android:versionCode="5" android:installLocation="auto">
     <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="-- %%INSERT_APP_NAME%% --" android:icon="@drawable/icon">
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density" android:name="com.gmail.manhcuong5993.QtAdMobActivity" android:label="-- %%INSERT_APP_NAME%% --" android:screenOrientation="unspecified" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <!-- Sample AdMob app ID: ca-app-pub-2725170905793669~9918877763 -->
-            <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-2725170905793669~9918877763"/>
+            <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+                <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-4983713911887668~7478155489"/>
             <!-- Application arguments -->
             <!-- meta-data android:name="android.app.arguments" android:value="arg1 arg2 arg3"/ -->
             <!-- Application arguments -->
@@ -73,7 +73,7 @@
     <!-- The following comment will be replaced upon deployment with default features based on the dependencies of the application.
          Remove the comment if you do not require these default features. -->
     <!-- %%INSERT_FEATURES -->
-    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>

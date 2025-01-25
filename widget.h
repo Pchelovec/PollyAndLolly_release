@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QLabel>
+#include <QTranslator>
 #include "game.h"
 #include "Admob/QmlBanner.h"
 #include"Admob/QmlInterstitialAd.h"
@@ -28,20 +29,26 @@ public:
 private slots:
     void on_label_prolog_clicked();
 
-    void on_pushButton_clicked();
-
     void on_label_walk_clicked();
 
     void on_label_road_clicked();
 
     void on_label_journey_clicked();
 
+    void on_pushButton_2_clicked();
+
+    void on_pushButton_clicked();
+
+    void on_pushButton_3_clicked();
+
 private:
     Ui::Widget *ui;
     Game *game;
+    QTranslator qtLanguageTranslator;
+
     QmlBanner *banner;
     QmlInterstitialAd *interstitial;
-    QLabel *label;
+    QLabel *loadingLevelProgressLabel;
 
 
     void setSceneByNewTask(GameTask * gameTask);
@@ -56,10 +63,16 @@ private:
     void loadLevel();
 
 
+    void setLanguageLabelText();
+
 protected:
     void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
     void mousePressEvent(QMouseEvent *event);
+
+    // QWidget interface
+protected:
+    void changeEvent(QEvent *);
 };
 
 #endif // WIDGET_H

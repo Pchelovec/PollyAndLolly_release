@@ -51,6 +51,10 @@ HEADERS += \
 FORMS += \
         widget.ui
 
+TRANSLATIONS += language/default_en.ts \
+        language/lang_ua.ts \
+        language/lang_ru.ts
+
 DISTFILES += \
     android/AndroidManifest.xml \
     android/gradle/wrapper/gradle-wrapper.jar \

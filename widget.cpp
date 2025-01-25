@@ -17,7 +17,7 @@ Widget::Widget(QWidget *parent) :
     updateGameProgressUI();
     loadAds();
     loadInterstitialAd();
-    label = new QLabel(this);
+    loadingLevelProgressLabel = new QLabel(this);
     qDebug()<<"Welcome to Polly And Lolly Lyric Story!";
 }
 
@@ -34,7 +34,7 @@ void Widget::loadAds()
     int width = screenGeometry.width();
 
     banner=new QmlBanner();
-    banner->setUnitId("ca-app-pub-2725170905793669/7808522074");
+    banner->setUnitId("ca-app-pub-4983713911887668/7311173522");
     banner->setBannerSize(QmlBanner::LARGE_BANNER);
     banner->setX(40);
     banner->setY((height/4)*3);
@@ -46,7 +46,7 @@ void Widget::loadAds()
 void Widget::loadInterstitialAd()
 {
     interstitial=new QmlInterstitialAd();
-    interstitial->setInterstitialAdUnitId("ca-app-pub-2725170905793669/8020275067");
+    interstitial->setInterstitialAdUnitId("ca-app-pub-4983713911887668/8108710871");
     interstitial->setInterstitialAdTestDeviceId("41E647017EBEBB0650DAE627391B7A43");
     interstitial->loadInterstitialAd();
 }
@@ -63,6 +63,7 @@ void Widget::drawScene0(QPaintEvent *pe)
 
 void Widget::paintEvent(QPaintEvent *event)
 {
+    if (ui->stackedWidget->currentIndex()==2){return;}
     if (game->changed){
         qDebug()<<"Widget paint for changed screen!";
         drawScene0(event);
@@ -94,7 +95,7 @@ void Widget::levelEndAds()
 void Widget::mousePressEvent(QMouseEvent *event)
 {
     qDebug()<<"Mouse pressed";
-
+    if (ui->stackedWidget->currentIndex()==2){return;}//if settings menu then return
     if (ui->stackedWidget->currentIndex()==1){
         if (game->isLastSceneInLevel()){
             ui->stackedWidget->setCurrentIndex(0);
@@ -112,6 +113,26 @@ void Widget::mousePressEvent(QMouseEvent *event)
     }
     game->changed=true;
     QWidget::update();
+}
+
+void Widget::changeEvent(QEvent * event)
+{
+    qDebug()<<event->type();
+    qDebug()<<(event->type() == QEvent::LanguageChange);
+
+    if (event->type() == QEvent::LanguageChange){
+        ui->retranslateUi(this);
+        updateGameProgressUI();
+        game->changed=true;
+        QWidget::update();
+    }
+    if ((event->type() == QEvent::WindowStateChange)or
+            (event->type() == QEvent::ActivationChange)){
+        game->changed=true;
+        QWidget::update();
+    }
+    // remember to call base class implementation
+    QWidget::changeEvent(event);
 }
 
 void Widget::setDeveloperImages()
@@ -139,17 +160,17 @@ void Widget::setSceneByNewTask(GameTask *gameTask)
 void Widget::loadLevel()
 {
     QMovie *movie = new QMovie(":/img/developer/load.gif");
-    label->setMovie(movie);
-    label->setAlignment(Qt::AlignCenter);
-    label->setVisible(true);
-    label->setGeometry(0,0,this->width(),this->height());
+    loadingLevelProgressLabel->setMovie(movie);
+    loadingLevelProgressLabel->setAlignment(Qt::AlignCenter);
+    loadingLevelProgressLabel->setVisible(true);
+    loadingLevelProgressLabel->setGeometry(0,0,this->width(),this->height());
     movie->start();
-    label->raise();
-    label->show();
+    loadingLevelProgressLabel->raise();
+    loadingLevelProgressLabel->show();
 
     game->loader.loadLevel1(game->lastPainted->level);
 
-    label->setVisible(false);
+    loadingLevelProgressLabel->setVisible(false);
 }
 
 
@@ -173,27 +194,22 @@ void Widget::on_label_prolog_clicked()
 
 void Widget::updateGameProgressUI()
 {
-    ui->label_prolog->setText("Пролог");
-    ui->label_walk->setText("Прогулка");
-    ui->label_road->setText("Поход");
-    ui->label_journey->setText("Путешествие");
+    ui->label_prolog->setText(QObject::tr("Beginning"));
+    ui->label_walk->setText(QObject::tr("Tea walk"));
+    ui->label_road->setText(QObject::tr("In the zoo"));
+    ui->label_journey->setText(QObject::tr("Voyage"));
     if (Progress::progressExist()){
         //load from file
         game->loadProgress();
         switch (game->lastPainted->level) {
-        case(Level::VOYAGE):{ui->label_journey->setText("Путешествие🗸");}
-        case(Level::ZOO):{ui->label_road->setText("Поход🗸");}
-        case(Level::TEA_WALK):{ui->label_walk->setText("Прогулка🗸");}
-        case(Level::PROLOG):{ui->label_prolog->setText("Пролог🗸");}
+        case(Level::VOYAGE):{ui->label_journey->setText(QObject::tr("Voyage🗸"));}
+        case(Level::ZOO):{ui->label_road->setText(QObject::tr("In the zoo🗸"));}
+        case(Level::TEA_WALK):{ui->label_walk->setText(QObject::tr("Tea walk🗸"));}
+        case(Level::PROLOG):{ui->label_prolog->setText(QObject::tr("Beginning🗸"));}
         }
     }
 }
 
-
-void Widget::on_pushButton_clicked()
-{
-    Progress::removeProgress();
-}
 
 void Widget::on_label_walk_clicked()
 {
@@ -250,4 +266,59 @@ void Widget::on_label_journey_clicked()
         game->changed=true;
         QWidget::update();
     }
+}
+
+void Widget::on_pushButton_2_clicked()
+{
+    //settings menu
+    ui->stackedWidget->setCurrentIndex(2);
+    banner->setVisible(false);
+}
+
+void Widget::setLanguageLabelText()
+{
+    qDebug()<<"game language is "<<ToString(game->story->language);
+    ui->currentLanguageLE->setText(ToString(game->story->language));
+}
+
+void Widget::on_pushButton_clicked()
+{
+    //change language
+    qDebug()<<ui->comboBox->currentText();
+    if (ui->comboBox->currentText()=="RU"){
+        qDebug()<<"Ru";
+        qtLanguageTranslator.load(":/language/lang_ru.qm");
+        QApplication::installTranslator(&qtLanguageTranslator);
+        game->story->language=supportedLanguage::RU;
+    }
+    if (ui->comboBox->currentText()=="UA"){
+        qDebug()<<"Ua";
+        qtLanguageTranslator.load(":/language/lang_ua.qm");
+        QApplication::installTranslator(&qtLanguageTranslator);
+        game->story->language=supportedLanguage::UA;
+    }
+    if (ui->comboBox->currentText()=="EN"){
+        qDebug()<<"En";
+        qtLanguageTranslator.load(":/language/default_en.qm");
+        QApplication::installTranslator(&qtLanguageTranslator);
+        game->story->language=supportedLanguage::EN;
+    }
+    if (Progress::progressExist()){game->saveProgress();}//update language too
+    setLanguageLabelText();
+    //to main pages and enable ads
+    ui->stackedWidget->setCurrentIndex(0);
+    banner->setVisible(true);
+    //fix background
+    game->changed=true;
+    QWidget::update();
+}
+
+void Widget::on_pushButton_3_clicked()
+{
+    //go to main menu without changes
+    ui->stackedWidget->setCurrentIndex(0);
+    banner->setVisible(true);
+    //fix background
+    game->changed=true;
+    QWidget::update();
 }

@@ -1,5 +1,4 @@
 #include "game.h"
-#include"textedstory.h"
 #include"patched_game_painter.h"
 #include <QWidget>
 #include <QPainter>
@@ -9,6 +8,7 @@
 Game::Game(QObject *parent) : QObject(parent)
 {
     lastPainted=new Scene();
+    story=&textedStory::getInstance();
 
     //load main backgrounds
     firstBackground.load(":/img/background0.webp");
@@ -485,12 +485,14 @@ bool Game::isLastSceneInLevel()
 
 void Game::saveProgress()
 {
-    Progress::saveProgress(lastPainted);
+    supportedLanguage lang = story->language;
+    Progress::saveProgress(lastPainted, lang);
 }
 
 void Game::loadProgress()
 {
-    Progress::loadProgress(lastPainted);
+    //todo refactoring
+    story->language=(supportedLanguage)Progress::loadProgress(lastPainted);
 }
 
 Scene* Game::drawByTask(GameTask *task)

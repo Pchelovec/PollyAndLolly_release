@@ -35,5 +35,9 @@
         <file>img/background0.webp</file>
         <file>img/grassBackground.webp</file>
         <file>img/developer/load.gif</file>
+        <file>img/developer/language.png</file>
+        <file>language/default_en.qm</file>
+        <file>language/lang_ru.qm</file>
+        <file>language/lang_ua.qm</file>
     </qresource>
 </RCC>

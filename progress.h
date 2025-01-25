@@ -6,6 +6,7 @@
 #include<QTextStream>
 #include<QFileInfo>
 #include "state.h"
+#include"textedstory.h"
 namespace  {
 
 class Progress
@@ -16,13 +17,15 @@ public:
     Progress(){}
     static QString filename;
 
-    static bool saveProgress(Scene *state){
+    static bool saveProgress(Scene *state, supportedLanguage lang){
         bool result;
         QFile file( filename );
         if ( file.open(QIODevice::ReadWrite) )
         {
+            qDebug()<<"Applicaction language is "<<lang;
             qDebug()<<"Progerss save level"<<state->level<<" scene-"<<state->screen.getScreen();
             QTextStream stream( &file );
+            stream << lang <<endl;
             stream << state->level <<endl;
             stream<<state->screen.getScreen();
             result=true;
@@ -31,20 +34,24 @@ public:
         return result;
     }
 
-    static bool loadProgress(Scene *state){
+    //load level and last painted scene to state
+    //return language
+    static int loadProgress(Scene *state){
 
         QFile file( filename );
         if ( file.open(QIODevice::ReadWrite) )
         {
-            int level; int scene;
+            int lang; int level; int scene;
             QTextStream stream( &file );
+            stream>>lang;
             stream>>level;
             stream>>scene;
             qDebug()<<"Dessirialized level-"<<level<<" ,scene-"<<scene;
+            qDebug()<<"restored lang "<<lang;
             state->setLevelAndScene((Level)level,Screen(scene));
-            return true;
+            return lang;
         }
-        return false;
+        return 0;
     }
 
     static bool removeProgress(){

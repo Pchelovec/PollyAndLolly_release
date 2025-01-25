@@ -7,12 +7,15 @@
 #include "gametask.h"
 #include "progress.h"
 #include "loader.h"
+#include"textedstory.h"
+
 class Game : public QObject
 {
     Q_OBJECT
 public:
     explicit Game(QObject *parent = nullptr);
     Loader loader;
+    textedStory *story;
     Scene *lastPainted;
     Scene* drawMeScene(GameTask *task);
     void debugScene(GameTask *task);
