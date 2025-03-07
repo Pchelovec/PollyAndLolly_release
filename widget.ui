@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_2">
@@ -72,7 +72,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="pack.qrc">
+            <iconset>
              <normaloff>:/img/developer/language.png</normaloff>:/img/developer/language.png</iconset>
            </property>
            <property name="iconSize">
@@ -240,7 +240,7 @@ QLabel:pressed {
            <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
-             <height>180</height>
+             <height>200</height>
             </size>
            </property>
           </spacer>
@@ -397,8 +397,6 @@ QLabel:pressed {
    </slots>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="pack.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

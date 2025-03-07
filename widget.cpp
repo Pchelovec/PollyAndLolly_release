@@ -16,7 +16,8 @@ Widget::Widget(QWidget *parent) :
     ui->stackedWidget->setCurrentIndex(0);
     updateGameProgressUI();
     loadAds();
-    loadInterstitialAd();
+//    loadInterstitialAd();
+//    QObject::connect(interstitial,SIGNAL(interstitialAdClosed()),interstitial,SLOT(loadInterstitialAd()));
     loadingLevelProgressLabel = new QLabel(this);
     qDebug()<<"Welcome to Polly And Lolly Lyric Story!";
 }
@@ -43,13 +44,13 @@ void Widget::loadAds()
     banner->setVisible(true);
 }
 
-void Widget::loadInterstitialAd()
-{
-    interstitial=new QmlInterstitialAd();
-    interstitial->setInterstitialAdUnitId("ca-app-pub-4983713911887668/8108710871");
-    interstitial->setInterstitialAdTestDeviceId("41E647017EBEBB0650DAE627391B7A43");
-    interstitial->loadInterstitialAd();
-}
+//void Widget::loadInterstitialAd()
+//{
+//    interstitial=new QmlInterstitialAd();
+//    interstitial->setInterstitialAdUnitId("ca-app-pub-4983713911887668/8108710871");
+//    interstitial->setInterstitialAdTestDeviceId("41E647017EBEBB0650DAE627391B7A43");
+//    interstitial->loadInterstitialAd();
+//}
 void Widget::drawScene0(QPaintEvent *pe)
 {
     GameTask *gameTask =new GameTask(Level::PROLOG,Prolog_scene::Prolog_StartMenuScreen);
@@ -86,11 +87,11 @@ GameTask * Widget::gameTaskForNextScene()
     return gameTask;
 }
 
-void Widget::levelEndAds()
-{
-    interstitial->loadInterstitialAd();
-    interstitial->showInterstitialAd();
-}
+//void Widget::levelEndAds()
+//{
+//    interstitial->showInterstitialAd();
+//    interstitial->loadInterstitialAd();
+//}
 
 void Widget::mousePressEvent(QMouseEvent *event)
 {
@@ -99,7 +100,7 @@ void Widget::mousePressEvent(QMouseEvent *event)
     if (ui->stackedWidget->currentIndex()==1){
         if (game->isLastSceneInLevel()){
             ui->stackedWidget->setCurrentIndex(0);
-            levelEndAds();
+//            levelEndAds();
             banner->loadBanner();
             banner->setVisible(true);
             game->saveProgress();
@@ -273,6 +274,7 @@ void Widget::on_pushButton_2_clicked()
     //settings menu
     ui->stackedWidget->setCurrentIndex(2);
     banner->setVisible(false);
+    setLanguageLabelText();
 }
 
 void Widget::setLanguageLabelText()

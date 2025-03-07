@@ -47,7 +47,7 @@ private:
     QTranslator qtLanguageTranslator;
 
     QmlBanner *banner;
-    QmlInterstitialAd *interstitial;
+//    QmlInterstitialAd *interstitial;
     QLabel *loadingLevelProgressLabel;
 
 
@@ -56,9 +56,9 @@ private:
 
     // QWidget interface
     void loadAds();
-    void loadInterstitialAd();
+//    void loadInterstitialAd();
 
-    void levelEndAds();
+//    void levelEndAds();
 
     void loadLevel();
 
